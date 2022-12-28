@@ -8,36 +8,55 @@ import java.util.Random;
  * In each step every two tokens that intersect compete with each other 
  * and the losing token becomes the winning token's type. 
  * The simulation stops when there is only one token type left.
- *
- * TODO: why don't the x coordinates get above 5?
  */
-public class Simulator implements Runnable {
+public class Simulator {
+    private Thread thread;
     private LinkedList<SimulatorObserver> observers;
+
+    public LinkedList<Token> getTokens() {
+        return tokens;
+    }
+
     private LinkedList<Token> tokens;
 
     private Random random;
 
     // size of the square game area
-    public static final int gameSize = 20;
+    public static final int gameSize = 300;
 
     // delay between steps in milliseconds
-    private static final int gameDelayInMs = 50;
+    public static final int gameDelayInMs = 200;
 
     private boolean gameOver;
 
     public Simulator() {
         observers = new LinkedList<>();
-        //observers.add();
         tokens = new LinkedList<>();
         random = new Random();
         gameOver = false;
-        createRandomTokens(25);
+        createRandomTokens(100);
+
+        thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!gameOver) {
+                    step();
+                    try {
+                        Thread.sleep(gameDelayInMs);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
     }
 
-    public static void main(String[] args) {
-        Simulator s = new Simulator();
-        s.step();
-        //s.run();
+    public void startSimulation() {
+        thread.start();
+    }
+
+    public void addObserver(SimulatorObserver observer) {
+        this.observers.add(observer);
     }
 
     /**
@@ -64,17 +83,7 @@ public class Simulator implements Runnable {
         }
     }
 
-    @Override
-    public void run() {
-        while (!gameOver) {
-            step();
-            try {
-                Thread.sleep(gameDelayInMs);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
+
 
     /**
      * Checks for every pair of token if they are close to each other
@@ -88,7 +97,7 @@ public class Simulator implements Runnable {
     public void step() {
         tokens.forEach(token -> {
             tokens.forEach(otherToken -> {
-                if (getDistance(token, otherToken) < 5) {
+                if (getDistance(token, otherToken) < 20) {
                     // tokens intersect
                     compete(token, otherToken);
                 }
@@ -99,8 +108,14 @@ public class Simulator implements Runnable {
         gameOver = checkGameOver();
     }
 
+    /**
+     * Calculate the distance of the center points of two tokens.
+     * @param token
+     * @param otherToken
+     * @return
+     */
     private double getDistance(Token token, Token otherToken) {
-        return Math.sqrt(Math.pow(token.getX() - otherToken.getX(), 2) + Math.pow(token.getY() - otherToken.getY(), 2));
+        return Math.sqrt(Math.pow(token.getX()-GraphicalVisualizer.LABEL_WIDTH/2 - otherToken.getX()-GraphicalVisualizer.LABEL_WIDTH/2, 2) + Math.pow(token.getY()-GraphicalVisualizer.LABEL_HEIGHT/2 - otherToken.getY()-GraphicalVisualizer.LABEL_HEIGHT/2, 2));
     }
 
     /**

@@ -65,7 +65,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.elementzero23.rockpaperscissorsjfx/com.elementzero23.rockpaperscissorsjfx.Simulator
+                                com.elementzero23.rockpaperscissorsjfx/com.elementzero23.rockpaperscissorsjfx.GraphicalVisualizer
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

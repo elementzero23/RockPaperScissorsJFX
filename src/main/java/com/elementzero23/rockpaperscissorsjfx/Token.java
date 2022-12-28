@@ -47,12 +47,13 @@ public class Token {
      * Moves the token randomly up to 5 pixels in each direction.
      */
     public void move() {
-        this.x = (random.nextInt(11) - 5);
-        while (this.x < 0 || this.x > Simulator.gameSize)
-            this.x = (random.nextInt(11) - 5);
+        this.x += (random.nextInt(11) - 5);
+        while (this.x < 0 || this.x > Simulator.gameSize - GraphicalVisualizer.LABEL_WIDTH)
+            this.x += (random.nextInt(11) - 5);
+
 
         this.y += (random.nextInt(11) - 5);
-        while (this.y < 0 || this.y > Simulator.gameSize)
+        while (this.y < 0 || this.y > Simulator.gameSize - GraphicalVisualizer.LABEL_HEIGHT)
             this.y += (random.nextInt(11) - 5);
     }
 }
