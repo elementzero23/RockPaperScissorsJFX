@@ -12,4 +12,4 @@ To start run the `main` method inside `GraphicalVisualizer` class.
 
 ## Screenshots:
 
-![alt text](https://github.com/elementzero23/RockPaperScissorsJFX/blob/main/screenshots/screenshot-rps.png?raw=true)
+![Screenshot of the simulation](https://github.com/elementzero23/RockPaperScissorsJFX/blob/main/screenshots/screenshot-rps.png?raw=true)
